@@ -72,7 +72,7 @@ apt-get -y install kibana
 wget https://raw.githubusercontent.com/sultonyakbar/elk/kibana/kibana.yml -O /etc/kibana/kibana/kibana.yml
 sed -i 's/localhost:9200/'$ip':9200/g' /etc/kibana/kibana.yml
 echo Your kibana host is
-cat /etc/logstash/conf.d/output.conf | grep server.host:
+cat /etc/kibana/kibana.yml | grep server.host:
 #sed -i 's/elasticsearch.url: "http:\/\/localhost:9200"/elasticsearch.url: "http:\/\/'$ip'":9200/g' /etc/kibana/kibana.yml
 echo Your Elasticsearch host is
-cat /etc/logstash/conf.d/output.conf | grep elasticsearch.url:
+cat /etc/kibana/kibana.yml | grep elasticsearch.url:
