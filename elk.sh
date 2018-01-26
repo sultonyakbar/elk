@@ -35,6 +35,15 @@ systemctl daemon-reload
 systemctl enable elasticsearch
 
 ##############################################################################################
+########## CONFIG ELASTICSEARCH
+##############################################################################################
+# Ask the domain for their name
+echo Enter Your IP Address
+read ip
+sed -i 's/network.host/network.host '$ip'/g' /etc/elasticsearch/elasticsearch.yml
+echo Your IP Address is  $ip
+
+##############################################################################################
 ########## INSTALL LOGSTASH
 ##############################################################################################
 apt-get -y install logstash
@@ -52,6 +61,8 @@ touch /etc/logstash/conf.d/{input,filter,output}.conf
 wget https://raw.githubusercontent.com/sultonyakbar/elk/logstash/input.conf -O /etc/logstash/conf.d/input.conf
 wget https://raw.githubusercontent.com/sultonyakbar/elk/logstash/input.conf -O /etc/logstash/conf.d/filter.conf
 wget https://raw.githubusercontent.com/sultonyakbar/elk/logstash/input.conf -O /etc/logstash/conf.d/output.conf
+sed -i 's/localhost:9200/'$ip':9200/g' /etc/logstash/conf.d/output.conf
+cat /etc/logstash/conf.d/output.conf | grep 9200
 systemctl restart logstash
 systemctl enable logstash
 ##############################################################################################
@@ -59,3 +70,9 @@ systemctl enable logstash
 ##############################################################################################
 apt-get -y install kibana
 wget https://raw.githubusercontent.com/sultonyakbar/elk/kibana/kibana.yml -O /etc/kibana/kibana/kibana.yml
+sed -i 's/localhost:9200/'$ip':9200/g' /etc/kibana/kibana.yml
+echo Your kibana host is
+cat /etc/logstash/conf.d/output.conf | grep server.host:
+#sed -i 's/elasticsearch.url: "http:\/\/localhost:9200"/elasticsearch.url: "http:\/\/'$ip'":9200/g' /etc/kibana/kibana.yml
+echo Your Elasticsearch host is
+cat /etc/logstash/conf.d/output.conf | grep elasticsearch.url:
